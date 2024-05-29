@@ -21,11 +21,12 @@ class MenuItemView(generics.ListCreateAPIView):
         serializer = self.get_serializer(items, many=True)
         return Response(serializer.data)
 
-    def put(self, request):
-        serializer = self.get_serializer(items, many=True)
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({"status":"success", "data":serializer.data})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SingleMenuItemView(generics.RetrieveUpdateAPIView, generics.DestroyAPIView):
