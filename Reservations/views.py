@@ -3,9 +3,10 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Booking, Menu
-from .serializers import menuSerializer, bookingSerializer
+from .serializers import menuSerializer, bookingSerializer, UserSerializer
 
 # Create your views here.
 def index(request):
@@ -51,7 +52,11 @@ class SingleMenuItemView(generics.RetrieveUpdateAPIView, generics.DestroyAPIView
         items.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
+        
 # This viewset method allows GET and POST methods
 class BookingViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Booking.objects.all()
     serializer_class = bookingSerializer
+    
+
